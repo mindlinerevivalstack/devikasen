@@ -1,5 +1,8 @@
 name: Sync Dropbox to GitHub
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   schedule:
     - cron: '0 */6 * * *'  # Run every 6 hours
@@ -9,28 +12,28 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
       - name: Install Dropbox SDK
         run: pip install dropbox
-      
+
       - name: Sync from Dropbox
         env:
           DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
         run: |
           python sync_dropbox.py
-      
+
       - name: Commit and Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add images/
           git commit -m "Auto-sync images from Dropbox" || true
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
