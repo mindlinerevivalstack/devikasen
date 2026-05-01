@@ -3,8 +3,13 @@ import dropbox
 from dropbox.exceptions import ApiError
 from dropbox.files import FileMetadata, FolderMetadata
 
+# Load token from GitHub Actions secret
 DROPBOX_TOKEN = os.getenv('DROPBOX_TOKEN')
-DROPBOX_FOLDER = '/devikasen-photos'
+
+# Your EXACT Dropbox folder name
+DROPBOX_FOLDER = '/Devika Sen Vickie Nguyen Yoga by AREXPRESSIONS.COM'
+
+# Local folder inside your GitHub repo
 LOCAL_FOLDER = 'images'
 
 dbx = dropbox.Dropbox(DROPBOX_TOKEN)
